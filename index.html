@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SPC Payment Reminder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            margin: 0;
+            padding: 10px;
+        }
+
+        .receipt {
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .logo-container {
+            background: #ffffff;
+            padding: 20px 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .spc {
+            font-family: Arial Black, Impact, sans-serif;
+            font-size: 80px;
+            font-weight: 900;
+            color: #2FA7B8;
+            letter-spacing: -5px;
+            margin: 0;
+            line-height: 0.8;
+        }
+
+        .subtitle {
+            margin-top: 10px;
+            font-size: 12px;
+            color: black;
+            letter-spacing: 6px;
+        }
+
+        p {
+            font-size: 14px;
+            margin: 6px 0;
+            line-height: 1.4;
+        }
+
+        hr {
+            border: 1px dashed #000;
+            margin: 12px 0;
+        }
+
+        #qrcode {
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 12px;
+            width: 100%;
+            background: #007dff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #005ec4;
+        }
+
+        a {
+            word-break: break-all;
+            color: #007dff;
+            text-decoration: none;
+        }
+
+        @media print {
+            button { display: none; }
+            body { background: none; padding: 0; }
+            .receipt { box-shadow: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="receipt">
+
+    <div class="logo-container">
+        <h1 class="spc">SPC</h1>
+        <div class="subtitle">CABLE TV NETWORK INC</div>
+    </div>
+
+    <p><strong>Payment Reminder</strong></p>
+    <p>Dear <span id="subscriberName">Subscriber</span>,</p>
+
+    <hr>
+
+    <p>
+        This is a friendly reminder to settle your internet subscription 
+        payment to continue enjoying uninterrupted service.
+    </p>
+
+    <!-- Direct GCash Button -->
+    <button onclick="openGCash()">Pay Now via GCash App</button>
+
+
+    <p><b>Or Scan QR to Open GCash</b></p>
+    <div id="qrcode"></div>
+
+
+
+    <p>
+        Or send to:<br>
+        <a href="tel:09565527008">0956-552-7008</a><br>
+        (Melody D.)
+    </p>
+
+    <p>
+        Please send your proof of payment on our Facebook page
+    </p>
+
+    <hr>
+
+    <p>
+        <a href="https://www.facebook.com/spccabletv" target="_blank">
+            Message us on Facebook
+        </a>
+    </p>
+
+    <p>
+        Or call/text us at<br>
+        0917-556-5219 or 0918-926-0945<br>
+        8:00 AM – 5:00 PM
+    </p>
+
+</div>
+
+<!-- QR Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+const gcashNumber = "09565527008"; // YOUR NUMBER
+const amount = 250.00; // CHANGE AMOUNT
+
+/* Generate Deep Link */
+const deepLink = `gcash://send?recipient=$${gcashNumber}&amount=$${amount}`;
+
+/* Create QR with smaller size */
+new QRCode(document.getElementById("qrcode"), {
+    text: deepLink,
+    width: 128,   // Changed from 180 to 128 (approximately 30% smaller)
+    height: 128,
+    colorDark: "#000000",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+});
+
+/* Open GCash */
+function openGCash() {
+    window.location.href = deepLink;
+
+    setTimeout(() => {
+        window.location.href = "https://www.gcash.com/";
+    }, 2000);
+}
+
+/* Get Name from URL */
+function getQueryParams() {
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("name") || "Subscriber";
+    document.getElementById("subscriberName").innerText = name;
+}
+
+window.onload = getQueryParams;
+</script>
+
+</body>
+</html>
